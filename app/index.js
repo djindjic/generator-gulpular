@@ -36,8 +36,6 @@ var GulpularGenerator = yeoman.generators.Base.extend({
       // this.dest.mkdir('app');
       // this.dest.mkdir('app/templates1');
 
-      this.src.copy('sale', 'code');
-
       this.src.copy('_package.json', 'package.json');
       this.src.copy('_bower.json', 'bower.json');
     },
