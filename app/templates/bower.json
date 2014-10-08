@@ -1,9 +1,6 @@
 {
   "name": "gulpular",
   "version": "0.0.0",
-  "authors": [
-    "Aleksandar Djindjic <djindjic@gmail.com>"
-  ],
   "license": "MIT",
   "ignore": [
     "**/.*",
