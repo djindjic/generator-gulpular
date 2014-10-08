@@ -31,9 +31,9 @@ var GulpularGenerator = yeoman.generators.Base.extend({
       this.src.copy('package.json', 'package.json');
       this.src.copy('bower.json', 'bower.json');
       this.src.copy('gulpfile.js', 'gulpfile.js');
-      this.src.copy('.editorconfig', '.editorconfig');
-      this.src.copy('.jshintrc', '.jshintrc');
-      this.src.copy('.gitignore', '.gitignore');
+      this.src.copy('editorconfig', '.editorconfig');
+      this.src.copy('jshintrc', '.jshintrc');
+      this.src.copy('gitignore', '.gitignore');
       this.directory('app', 'app');
     }
   },
