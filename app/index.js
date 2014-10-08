@@ -7,43 +7,34 @@ var yosay = require('yosay');
 var GulpularGenerator = yeoman.generators.Base.extend({
   initializing: function () {
     this.pkg = require('../package.json');
+
+    this.argument('appname', { type: String, required: false });
+    this.appname = this.appname || path.basename(process.cwd());
+    this.appname = this._.camelize(this._.slugify(this._.humanize(this.appname)));
   },
 
-  prompting: function () {
+  promptTask: function () {
     var done = this.async();
-
-    // Have Yeoman greet the user.
-    this.log(yosay(
-      'Welcome to the well-made Gulpular generator!'
-    ));
-
-    var prompts = [{
-      type: 'confirm',
-      name: 'someOption',
-      message: 'Would you like to enable this option?',
-      default: true
-    }];
-
-    this.prompt(prompts, function (props) {
-      this.someOption = props.someOption;
-
+    this.prompt({
+      type    : 'input',
+      name    : 'name',
+      message : 'Your project name',
+      default : this.appname // Default to current folder name
+    }, function (answers) {
+      this.log(answers.name);
       done();
     }.bind(this));
   },
 
   writing: {
     app: function () {
-      // this.dest.mkdir('app');
-      // this.dest.mkdir('app/templates');
-
       this.src.copy('package.json', 'package.json');
       this.src.copy('bower.json', 'bower.json');
-    },
-
-    projectfiles: function () {
+      this.src.copy('gulpfile.js', 'gulpfile.js');
       this.src.copy('.editorconfig', '.editorconfig');
       this.src.copy('.jshintrc', '.jshintrc');
       this.src.copy('.gitignore', '.gitignore');
+      this.directory('app', 'app');
     }
   },
 
