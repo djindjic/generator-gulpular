@@ -1,5 +1,10 @@
 # generator-gulpular [![Build Status](https://secure.travis-ci.org/djindjic/generator-gulpular.png?branch=master)](https://travis-ci.org/djindjic/generator-gulpular)
 
+[npm-url]: https://npmjs.org/package/gulp-util
+[npm-image]: https://badge.fury.io/js/gulp-util.svg
+[depstat-url]: https://david-dm.org/gulpjs/gulp-util
+[depstat-image]: https://david-dm.org/gulpjs/gulp-util.svg
+
 > [Yeoman](http://yeoman.io) generator
 
 
