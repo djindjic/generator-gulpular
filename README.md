@@ -1,4 +1,9 @@
-# generator-gulpular [![Build Status](https://secure.travis-ci.org/djindjic/generator-gulpular.png?branch=master)](https://travis-ci.org/djindjic/generator-gulpular)
+# generator-gulpular [![NPM version][npm-image]][npm-url] [![Build Status](https://secure.travis-ci.org/djindjic/generator-gulpular.png?branch=master)](https://travis-ci.org/djindjic/generator-gulpular) [![Dependency Status][depstat-image]][depstat-url]
+
+[depstat-url]: https://david-dm.org/djindjic/generator-gulpular
+[depstat-image]: https://david-dm.org/djindjic/generator-gulpular.svg
+[npm-url]: https://npmjs.org/package/generator-gulpular
+[npm-image]: https://badge.fury.io/js/generator-gulpular.svg
 
 > [Yeoman](http://yeoman.io) generator
 
