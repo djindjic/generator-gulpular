@@ -145,7 +145,7 @@ var indexHtml = function () {
 var scripts = function() {
   return new Promise(function (fulfil) {
     $.util.log('Rebuilding app scripts');
-    gulp.src(['app/config.js', 'app/app.js', 'app/**/*module.js', 'app/**/config/*.js', 'app/**/*.js'])
+    gulp.src(['app/config.js', 'app/app.js', 'app/**/*module.js', 'app/**/config/*.js', 'app/**/*.js', '!app/vendor/**/*'])
       .pipe($.jshint())
       .pipe($.jshint.reporter(stylish))
       .pipe($.sourcemaps.init())
@@ -161,7 +161,7 @@ var scripts = function() {
 var styles = function() {
   return new Promise(function (fulfil) {
     $.util.log('Rebuilding app styles');
-    gulp.src(['app/**/styles/*.css'])
+    gulp.src(['app/**/styles/*.css', '!app/vendor/**/*'])
       .pipe($.concat('app.css'))
       .pipe(gulp.dest('./builds/development/styles'))
       .pipe($.minifyCss({
@@ -270,7 +270,7 @@ var startServer = function(){
         port: 9000,
         livereload: true,
         fallback: 'index.html',
-        proxies: [
+         proxies: [
           {
             source: '/api', target: 'http://localhost:3000/'
           }
@@ -282,23 +282,23 @@ var startServer = function(){
 
 var watchFiles = function() {
   $.util.log('Watching files');
-  $.watch('app/index.html', function(files) {
+  $.watch(['app/index.html'], function(files) {
     clean(['builds/**/index.html'])
     .then(indexHtml);
   });
-  $.watch('app/**/templates/*.html', function(files) {
+  $.watch('app/modules/**/templates/*.html', function(files) {
     clean(['builds/**/scripts/templates.js'])
     .then(templates);
   });
-  $.watch('app/**/*.js', function(files) {
+  $.watch(['app/**/*.js', '!app/vendor/**/*.js'], function(files) {
     clean(['builds/**/scripts/app.js'])
     .then(scripts);
   });
-  $.watch('app/**/*.css', function(files) {
+  $.watch(['app/**/*.css', '!app/vendor/**/*.css'], function(files) {
     clean(['builds/**/styles/app.css'])
     .then(styles);
   });
-  $.watch('app/**/fonts/*', function(files) {
+  $.watch(['app/**/fonts/*', '!app/vendor/**/*'], function(files) {
     clean(['builds/**/fonts/**/*'])
     .then(fonts);
   });
