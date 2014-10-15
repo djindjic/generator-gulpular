@@ -5,6 +5,7 @@ var fs             = require('fs'),
     mainBowerFiles = require('main-bower-files'),
     url            = require('url'),
     stylish        = require('jshint-stylish'),
+    glob           = require('glob'),
     $              = require('gulp-load-plugins')(),
     cachebust      = new $.cachebust;
 
@@ -73,9 +74,9 @@ var vendorStyles = function() {
     $.util.log('-styles');
     gulp.src(['app/vendor/**/styles/*'].concat(bowerFiles.styles()))
       .pipe($.concat('lib.css'))
-      .pipe($.uncss({
-        html: ['builds/development/index.html']
-      }))
+      // .pipe($.uncss({
+      //   html: ['./builds/development/index.html']
+      // }))
       .pipe($.minifyCss({
         keepSpecialComments: 0
       }))
