@@ -5,7 +5,8 @@ var fs             = require('fs'),
     mainBowerFiles = require('main-bower-files'),
     url            = require('url'),
     stylish        = require('jshint-stylish'),
-    $              = require('gulp-load-plugins')();
+    $              = require('gulp-load-plugins')(),
+    cachebust      = new $.cachebust;
 
 var eachModule = function(closure, cb) {
   var rootDir = './app/modules';
@@ -59,6 +60,7 @@ var vendorScripts = function() {
     $.util.log('-scripts');
     gulp.src(['app/vendor/**/*.js'].concat(bowerFiles.scripts()))
       .pipe($.concat('lib.js'))
+      .pipe(cachebust.resources())
       .pipe(gulp.dest('./builds/development/scripts'))
       .pipe($.uglify())
       .pipe(gulp.dest('./builds/production/scripts'))
@@ -74,6 +76,7 @@ var vendorStyles = function() {
       .pipe($.minifyCss({
         keepSpecialComments: 0
       }))
+      .pipe(cachebust.resources())
       .pipe(gulp.dest('./builds/development/styles'))
       .pipe(gulp.dest('./builds/production/styles'))
       .on('end', fulfil);
@@ -137,6 +140,7 @@ var indexHtml = function () {
         removeEmptyAttributes: true,
         removeComments: true
       }))
+      .pipe(cachebust.references())
       .pipe(gulp.dest('./builds/production'))
       .on('end', fulfil);
     });
@@ -151,6 +155,7 @@ var scripts = function() {
       .pipe($.sourcemaps.init())
         .pipe($.concat('app.js'))
       .pipe($.sourcemaps.write())
+      .pipe(cachebust.resources())
       .pipe(gulp.dest('./builds/development/scripts'))
       .pipe($.uglify())
       .pipe(gulp.dest('./builds/production/scripts'))
@@ -163,6 +168,7 @@ var styles = function() {
     $.util.log('Rebuilding app styles');
     gulp.src(['app/**/styles/*.css', '!app/vendor/**/*'])
       .pipe($.concat('app.css'))
+      .pipe(cachebust.resources())
       .pipe(gulp.dest('./builds/development/styles'))
       .pipe($.minifyCss({
         keepSpecialComments: 0
@@ -256,6 +262,7 @@ var templates = function () {
                 return splitPath[splitPath.length - 1];
             }
           }))
+        .pipe(cachebust.resources())
         .pipe(gulp.dest('./builds/development/scripts'))
         .pipe($.uglify())
         .pipe(gulp.dest('./builds/production/scripts'));
@@ -287,15 +294,15 @@ var watchFiles = function() {
     .then(indexHtml);
   });
   $.watch('app/modules/**/templates/*.html', function(files) {
-    clean(['builds/**/scripts/templates.js'])
+    clean(['builds/**/scripts/templates*.js'])
     .then(templates);
   });
   $.watch(['app/**/*.js', '!app/vendor/**/*.js'], function(files) {
-    clean(['builds/**/scripts/app.js'])
+    clean(['builds/**/scripts/app*.js'])
     .then(scripts);
   });
   $.watch(['app/**/*.css', '!app/vendor/**/*.css'], function(files) {
-    clean(['builds/**/styles/app.css'])
+    clean(['builds/**/styles/app*.css'])
     .then(styles);
   });
   $.watch(['app/**/fonts/*', '!app/vendor/**/*'], function(files) {
@@ -304,8 +311,8 @@ var watchFiles = function() {
   });
   $.watch(['./bower.json', 'app/vendor/**/*'], function(files) {
     clean([
-      'builds/**/scripts/lib.js',
-      'builds/**/styles/lib.css',
+      'builds/**/scripts/lib*.js',
+      'builds/**/styles/lib*.css',
       'builds/**/fonts/*',
       'builds/**/images/*'
     ])
