@@ -130,6 +130,7 @@ var indexHtml = function () {
   return new Promise(function (fulfil) {
     $.util.log('Rebuilding index.html');
     gulp.src('./app/index.html')
+      .pipe(cachebust.references())
       .pipe(gulp.dest('./builds/development'))
       .pipe($.htmlmin({
         collapseWhitespace: true,
@@ -140,7 +141,6 @@ var indexHtml = function () {
         removeEmptyAttributes: true,
         removeComments: true
       }))
-      .pipe(cachebust.references())
       .pipe(gulp.dest('./builds/production'))
       .on('end', fulfil);
     });
@@ -328,8 +328,8 @@ gulp.task('default',
     .then(styles)
     .then(images)
     .then(fonts)
-    .then(indexHtml)
     .then(vendor)
+    .then(indexHtml)
     .then(startServer)
     .then(watchFiles);
   }
