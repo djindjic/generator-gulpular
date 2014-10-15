@@ -1,4 +1,6 @@
-# generator-gulpular [![NPM version][npm-image]][npm-url] [![Build Status](https://secure.travis-ci.org/djindjic/generator-gulpular.png?branch=master)](https://travis-ci.org/djindjic/generator-gulpular) [![Dependency Status][depstat-image]][depstat-url]
+# generator-gulpular
+
+[![NPM version][npm-image]][npm-url] [![Build Status](https://secure.travis-ci.org/djindjic/generator-gulpular.png?branch=master)](https://travis-ci.org/djindjic/generator-gulpular) [![Dependency Status][depstat-image]][depstat-url]
 
 [depstat-url]: https://david-dm.org/djindjic/generator-gulpular
 [depstat-image]: https://david-dm.org/djindjic/generator-gulpular.svg
