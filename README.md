@@ -4,6 +4,7 @@
 [depstat-image]: https://david-dm.org/djindjic/generator-gulpular.svg
 [npm-url]: https://npmjs.org/package/generator-gulpular
 [npm-image]: https://badge.fury.io/js/generator-gulpular.svg
+[![Code Climate](https://codeclimate.com/github/djindjic/generator-gulpular/badges/gpa.svg)](https://codeclimate.com/github/djindjic/generator-gulpular)
 
 > [Yeoman](http://yeoman.io) generator
 
