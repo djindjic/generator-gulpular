@@ -73,6 +73,9 @@ var vendorStyles = function() {
     $.util.log('-styles');
     gulp.src(['app/vendor/**/styles/*'].concat(bowerFiles.styles()))
       .pipe($.concat('lib.css'))
+      .pipe($.uncss({
+        html: ['builds/development/index.html']
+      }))
       .pipe($.minifyCss({
         keepSpecialComments: 0
       }))
