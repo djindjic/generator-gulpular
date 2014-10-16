@@ -74,9 +74,9 @@ var vendorStyles = function() {
     $.util.log('-styles');
     gulp.src(['app/vendor/**/styles/*'].concat(bowerFiles.styles()))
       .pipe($.concat('lib.css'))
-      // .pipe($.uncss({
-      //   html: ['./builds/development/index.html']
-      // }))
+      .pipe($.uncss({
+        html: glob.sync('app/**/*.html')
+      }))
       .pipe($.minifyCss({
         keepSpecialComments: 0
       }))
@@ -118,36 +118,6 @@ var vendor = function() {
     .then(vendorFonts)
     .then(fulfil);
   });
-};
-
-var clean = function (paths) {
-  return new Promise(function (fulfil) {
-    $.util.log('Clear:');
-    paths.forEach(function(path) {
-      $.util.log('-' + path);
-    });
-    del(paths, fulfil);
-  });
-};
-
-var indexHtml = function () {
-  return new Promise(function (fulfil) {
-    $.util.log('Rebuilding index.html');
-    gulp.src('./app/index.html')
-      .pipe(cachebust.references())
-      .pipe(gulp.dest('./builds/development'))
-      .pipe($.htmlmin({
-        collapseWhitespace: true,
-        conservativeCollapse: true,
-        minifyJS: true,
-        minifyCSS: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeComments: true
-      }))
-      .pipe(gulp.dest('./builds/production'))
-      .on('end', fulfil);
-    });
 };
 
 var scripts = function() {
@@ -272,6 +242,36 @@ var templates = function () {
         .pipe(gulp.dest('./builds/production/scripts'));
     }, fulfil);
   });
+};
+
+var clean = function (paths) {
+  return new Promise(function (fulfil) {
+    $.util.log('Clear:');
+    paths.forEach(function(path) {
+      $.util.log('-' + path);
+    });
+    del(paths, fulfil);
+  });
+};
+
+var indexHtml = function () {
+  return new Promise(function (fulfil) {
+    $.util.log('Rebuilding index.html');
+    gulp.src('./app/index.html')
+      .pipe(cachebust.references())
+      .pipe(gulp.dest('./builds/development'))
+      .pipe($.htmlmin({
+        collapseWhitespace: true,
+        conservativeCollapse: true,
+        minifyJS: true,
+        minifyCSS: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeComments: true
+      }))
+      .pipe(gulp.dest('./builds/production'))
+      .on('end', fulfil);
+    });
 };
 
 var startServer = function(){
