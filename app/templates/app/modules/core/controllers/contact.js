@@ -1,13 +1,13 @@
 (function() {
-	'use strict';
+  'use strict';
 
-	angular
-	  .module('core')
-	  .controller('ContactCtrl', [ContactCtrl]);
+  angular
+    .module('core')
+    .controller('ContactCtrl', [ContactCtrl]);
 
-	function ContactCtrl() {
-		var vm = this;
+  function ContactCtrl() {
+    var vm = this;
 
-	  	vm.a = 'contact';
-	 }
+      vm.a = 'contact';
+   }
 })();
