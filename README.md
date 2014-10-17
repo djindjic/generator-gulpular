@@ -7,6 +7,7 @@
 [npm-url]: https://npmjs.org/package/generator-gulpular
 [npm-image]: https://badge.fury.io/js/generator-gulpular.svg
 [![Code Climate](https://codeclimate.com/github/djindjic/generator-gulpular/badges/gpa.svg)](https://codeclimate.com/github/djindjic/generator-gulpular)
+[![Stories in Ready](https://badge.waffle.io/djindjic/generator-gulpular.svg?label=ready&title=Ready)](http://waffle.io/djindjic/generator-gulpular)
 
 > [Yeoman](http://yeoman.io) generator
 
