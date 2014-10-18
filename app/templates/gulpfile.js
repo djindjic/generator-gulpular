@@ -273,6 +273,16 @@ var indexHtml = function () {
     });
 };
 
+var createCordovaBuildFiles = function () {
+  return new Promise(function (fulfil) {
+    $.util.log('Creating cordova build files');
+    gulp.src('./builds/production/**/*')
+      .pipe(cachebust.references())
+      .pipe(gulp.dest('./www'))
+      .on('end', fulfil);
+    });
+};
+
 var startServer = function(){
   return new Promise(function (fulfil) {
     gulp.src('./builds/development')
@@ -334,6 +344,7 @@ gulp.task('default',
     .then(vendor)
     .then(indexHtml)
     .then(startServer)
-    .then(watchFiles);
+    .then(watchFiles)
+    .then(createCordovaBuildFiles);;
   }
 );
