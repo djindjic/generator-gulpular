@@ -335,7 +335,7 @@ var watchFiles = function() {
 
 gulp.task('default',
   function() {
-    clean(['builds'])
+    clean(['builds', 'www'])
     .then(scripts)
     .then(templates)
     .then(styles)
