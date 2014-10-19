@@ -8,6 +8,6 @@
   function ContactCtrl() {
     var vm = this;
 
-      vm.a = 'contact';
+      vm.a = 'contact gulp';
    }
 })();

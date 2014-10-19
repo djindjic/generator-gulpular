@@ -304,23 +304,31 @@ var watchFiles = function() {
   $.util.log('Watching files');
   $.watch(['app/index.html'], function() {
     clean(['builds/**/index.html'])
-    .then(indexHtml);
+    .then(indexHtml)
+    .then(createCordovaBuildFiles);
   });
   $.watch('app/modules/**/templates/*.html', function() {
     clean(['builds/**/scripts/templates*.js'])
-    .then(templates);
+    .then(templates)
+    .then(indexHtml)
+    .then(createCordovaBuildFiles);
   });
   $.watch(['app/**/*.js', '!app/vendor/**/*.js'], function() {
     clean(['builds/**/scripts/app*.js'])
-    .then(scripts);
+    .then(scripts)
+    .then(indexHtml)
+    .then(createCordovaBuildFiles);
   });
   $.watch(['app/**/*.css', '!app/vendor/**/*.css'], function() {
     clean(['builds/**/styles/app*.css'])
-    .then(styles);
+    .then(styles)
+    .then(indexHtml)
+    .then(createCordovaBuildFiles);
   });
   $.watch(['app/**/fonts/*', '!app/vendor/**/*'], function() {
     clean(['builds/**/fonts/**/*'])
-    .then(fonts);
+    .then(fonts)
+    .then(createCordovaBuildFiles);
   });
   $.watch(['./bower.json', 'app/vendor/**/*'], function() {
     clean([
@@ -329,7 +337,9 @@ var watchFiles = function() {
       'builds/**/fonts/*',
       'builds/**/images/*'
     ])
-    .then(vendor);
+    .then(vendor)
+    .then(indexHtml)
+    .then(createCordovaBuildFiles);
   });
 };
 
@@ -343,8 +353,8 @@ gulp.task('default',
     .then(fonts)
     .then(vendor)
     .then(indexHtml)
+    .then(createCordovaBuildFiles)
     .then(startServer)
-    .then(watchFiles)
-    .then(createCordovaBuildFiles);;
+    .then(watchFiles);
   }
 );
