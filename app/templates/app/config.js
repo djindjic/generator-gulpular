@@ -7,7 +7,7 @@ var ApplicationConfiguration = (function() {
   
   // Init module configuration options
   var applicationModuleName = 'Gulpular';
-  var applicationModuleVendorDependencies = ['ngRoute'];
+  var applicationModuleVendorDependencies = ['ngRoute', 'ionic'];
 
   // Add a new vertical module
   var registerModule = function(moduleName, dependencies) {

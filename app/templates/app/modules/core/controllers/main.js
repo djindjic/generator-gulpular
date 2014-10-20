@@ -6,6 +6,5 @@
     .controller('MainCtrl', MainCtrl);
 
   function MainCtrl() {
-
   }
 })();
