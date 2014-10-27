@@ -147,7 +147,7 @@ var startServer = function(){
         port: 9000,
         livereload: true,
         fallback: 'index.html',
-         proxies: [
+        proxies: [
           {
             source: '/api', target: 'http://localhost:3000/'
           }
