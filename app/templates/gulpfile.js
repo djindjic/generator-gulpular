@@ -1,120 +1,22 @@
-var fs             = require('fs'),
-    Promise        = require('promise'),
+var Promise        = require('promise'),
     gulp           = require('gulp'),
     del            = require('del'),
-    mainBowerFiles = require('main-bower-files'),
     stylish        = require('jshint-stylish'),
-    glob           = require('glob'),
     $              = require('gulp-load-plugins')(),
     cachebust      = new $.cachebust;
 
-var eachModule = function(closure, cb) {
-  var rootDir = './app/modules';
-  var dirs, file, filePath, files, stat, _i, _len;
-  files = fs.readdirSync(rootDir);
-  dirs = [];
-  for (_i = 0, _len = files.length; _i < _len; _i++) {
-    file = files[_i];
-    if (file[0] !== '.') {
-      filePath = "" + rootDir + "/" + file;
-      stat = fs.statSync(filePath);
-      if (stat.isDirectory()) {
-        dirs.push(file);
-      }
-    }
-  }
-  for(var moduleIndex = 0; moduleIndex <= dirs.length; moduleIndex++) {
-    if(moduleIndex === dirs.length) {
-      cb();
-    } else {
-      closure(dirs[moduleIndex]);
-    }
-  }
-};
-
-var bowerFiles = {
-  scripts: function() {
-    var fileRegEx = (/.*\.js$/i);
-    var files = mainBowerFiles({filter: fileRegEx});
-    return files;
-  },
-  styles: function() {
-    var fileRegEx = (/.*\.css$/i);
-    var files = mainBowerFiles({filter: fileRegEx});
-    return files;
-  },
-  fonts: function() {
-    var fileRegEx = (/.*\.(?:eot|woff|ttf|svg)$/i);
-    var files = mainBowerFiles({filter: fileRegEx});
-    return files;
-  },
-  images: function() {
-    var fileRegEx = (/.*\.(?:jpg|png|gif)$/i);
-    var files = mainBowerFiles({filter: fileRegEx});
-    return files;
-  }
-};
-
-var vendorScripts = function() {
-  return new Promise(function (fulfil) {
-    $.util.log('-scripts');
-    gulp.src(['app/vendor/**/*.js'].concat(bowerFiles.scripts()))
-      .pipe($.concat('lib.js'))
-      .pipe(cachebust.resources())
-      .pipe(gulp.dest('./builds/development/scripts'))
-      .pipe($.uglify())
-      .pipe(gulp.dest('./builds/production/scripts'))
-      .on('end', fulfil);
-  });
-};
-
-var vendorStyles = function() {
-  return new Promise(function (fulfil) {
-    $.util.log('-styles');
-    gulp.src(['app/vendor/**/styles/*'].concat(bowerFiles.styles()))
-      .pipe($.concat('lib.css'))
-      .pipe($.uncss({
-        html: glob.sync('app/**/*.html')
-      }))
-      .pipe($.minifyCss({
-        keepSpecialComments: 0
-      }))
-      .pipe(cachebust.resources())
-      .pipe(gulp.dest('./builds/development/styles'))
-      .pipe(gulp.dest('./builds/production/styles'))
-      .on('end', fulfil);
-  });
-};
-
-var vendorFonts = function() {
-  return new Promise(function (fulfil) {
-    $.util.log('-fonts');
-    gulp.src(['app/vendor/**/fonts/**/*'].concat(bowerFiles.fonts()))
-      .pipe($.flatten())
-      .pipe(gulp.dest('./builds/development/fonts'))
-      .pipe(gulp.dest('./builds/production/fonts'))
-      .on('end', fulfil);
-  });
-};
-
-var vendorImages = function() {
-  return new Promise(function (fulfil) {
-    $.util.log('-images');
-    gulp.src(['app/vendor/**/images/**/*'].concat(bowerFiles.images()))
-      .pipe($.flatten())
-      .pipe(gulp.dest('./builds/development/images'))
-      .pipe(gulp.dest('./builds/production/images'))
-      .on('end', fulfil);
-  });
-};
+var mainUtil      = require('./gulp/main_util'),
+    appImagesUtil = require('./gulp/app_images_util'),
+    appFontsUtil  = require('./gulp/app_fonts_util'),
+    vendorUtil    = require('./gulp/vendor_util');
 
 var vendor = function() {
   return new Promise(function (fulfil) {
     $.util.log('Rebuilding vendor and bower assets');
-    vendorScripts()
-    .then(vendorStyles)
-    .then(vendorImages)
-    .then(vendorFonts)
+    vendorUtil.vendorScripts(cachebust)
+    .then(vendorUtil.vendorStyles(cachebust))
+    .then(vendorUtil.vendorImages)
+    .then(vendorUtil.vendorFonts)
     .then(fulfil);
   });
 };
@@ -151,64 +53,19 @@ var styles = function() {
     });
 };
 
-var imagesModules = function() {
-  return new Promise(function (fulfil) {
-    eachModule(function(module) {
-      $.util.log('-' + module);
-      gulp.src(['app/modules/' + module + '/images/*'])
-        .pipe(gulp.dest('./builds/development/images/' + module))
-        .pipe(gulp.dest('./builds/production/images/' + module));
-    }, fulfil);
-  });
-};
-
-var imagesShared = function() {
-  return new Promise(function (fulfil) {
-    $.util.log('-shared');
-    gulp.src(['app/shared/images/*'])
-      .pipe($.flatten())
-      .pipe(gulp.dest('./builds/development/images/shared'))
-      .pipe(gulp.dest('./builds/production/images/shared'))
-      .on('end', fulfil);
-  });
-};
-
 var images = function() {
   return new Promise(function (fulfil) {
     $.util.log('Rebuilding app images');
-    imagesModules()
-    .then(imagesShared)
+    appImagesUtil.imagesModules()
+    .then(appImagesUtil.imagesShared)
     .then(fulfil);
-  });
-};
-
-var fontsModules = function() {
-  return new Promise(function (fulfil) {
-    $.util.log('Rebuilding app fonts');
-    eachModule(function(module) {
-      $.util.log('-' + module);
-      gulp.src(['app/modules/' + module + '/fonts/*'])
-        .pipe(gulp.dest('./builds/development/fonts/' + module))
-        .pipe(gulp.dest('./builds/production/fonts/' + module));
-    }, fulfil);
-  });
-};
-
-var fontsShared = function() {
-  return new Promise(function (fulfil) {
-    $.util.log('-shared');
-    gulp.src(['app/shared/fonts/*'])
-      .pipe($.flatten())
-      .pipe(gulp.dest('./builds/development/fonts/shared'))
-      .pipe(gulp.dest('./builds/production/fonts/shared'))
-      .on('end', fulfil);
   });
 };
 
 var fonts = function() {
   return new Promise(function (fulfil) {
-    fontsModules()
-    .then(fontsShared)
+    appFontsUtil.fontsModules()
+    .then(appFontsUtil.fontsShared)
     .then(fulfil);
   });
 };
@@ -216,7 +73,7 @@ var fonts = function() {
 var templates = function () {
   return new Promise(function (fulfil) {
     $.util.log('Rebuilding app templates');
-    eachModule(function(module) {
+    mainUtil.eachModule(function(module) {
       $.util.log('-' + module);
       gulp.src('app/modules/' + module + '/templates/*.html')
         .pipe($.htmlmin({
@@ -229,12 +86,12 @@ var templates = function () {
           removeComments: true
         }))
         .pipe($.angularTemplatecache({
-            module: module,
-            base: function(file) {
-                var splitPath = file.relative.split('/');
-                return splitPath[splitPath.length - 1];
-            }
-          }))
+          module: module,
+          base: function(file) {
+              var splitPath = file.relative.split('/');
+              return splitPath[splitPath.length - 1];
+          }
+        }))
         .pipe(cachebust.resources())
         .pipe(gulp.dest('./builds/development/scripts'))
         .pipe($.uglify())
