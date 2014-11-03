@@ -16,6 +16,15 @@ exports.vendorScripts = function(cachebust) {
       .on('end', fulfil);
   });
 };
+exports.vendorJspm = function() {
+  return new Promise(function (fulfil) {
+    $.util.log('-jspm');
+    gulp.src('app/jspm_packages/**/*')
+      .pipe(gulp.dest('./builds/development/jspm_packages'))
+      .pipe(gulp.dest('./builds/production/jspm_packages'))
+      .on('end', fulfil);
+  });
+};
 
 exports.vendorStyles = function(cachebust) {
   return new Promise(function (fulfil) {

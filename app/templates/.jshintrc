@@ -1,5 +1,5 @@
 {
   "undef": true,
   "unused": true,
-  "predef": [ "angular", "ApplicationConfiguration", "window", "document" ]
+  "predef": [ "angular", "System", "ApplicationConfiguration", "window", "document" ]
 }

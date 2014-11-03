@@ -5,3 +5,4 @@ builds
 platforms
 plugins
 www
+app/jspm_packages
