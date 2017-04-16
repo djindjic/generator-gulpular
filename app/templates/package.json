@@ -22,5 +22,14 @@
     "jshint-stylish": "^1.0.0",
     "main-bower-files": "^2.0.0",
     "promise": "^6.0.0"
+  },
+  "jspm": {
+    "name": "gulpular",
+    "directories": {
+      "lib": "app",
+      "dist": "jspm-build",
+      "packages": "app/jspm_packages"
+    },
+    "configFile": "app/config.js"
   }
 }

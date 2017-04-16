@@ -14,6 +14,7 @@ var vendor = function() {
   return new Promise(function (fulfil) {
     $.util.log('Rebuilding vendor and bower assets');
     vendorUtil.vendorScripts(cachebust)
+     .then(vendorUtil.vendorJspm())
     .then(vendorUtil.vendorStyles(cachebust))
     .then(vendorUtil.vendorImages)
     .then(vendorUtil.vendorFonts)
@@ -24,7 +25,7 @@ var vendor = function() {
 var scripts = function() {
   return new Promise(function (fulfil) {
     $.util.log('Rebuilding app scripts');
-    gulp.src(['app/config.js', 'app/app.js', 'app/**/*module.js', 'app/**/config/*.js', 'app/**/*.js', '!app/vendor/**/*'])
+    gulp.src(['app/config.js', 'app/app.js', 'app/**/*module.js', 'app/**/config/*.js', 'app/**/*.js', '!app/vendor/**/*', '!app/jspm_packages/**/*'])
       .pipe($.jshint())
       .pipe($.jshint.reporter(stylish))
       .pipe($.sourcemaps.init())
